@@ -1,0 +1,48 @@
+k logs alloy-skwc8 -n alloy
+ts=2025-05-22T13:40:37.459272006Z level=info "boringcrypto enabled"=false
+ts=2025-05-22T13:40:37.458392965Z level=info source=/go/pkg/mod/github.com/!kim!machine!gun/automemlimit@v0.7.0/memlimit/memlimit.go:175 msg="memory is not limited, skipping" package=github.com/KimMachineGun/automemlimit/memlimit
+ts=2025-05-22T13:40:37.459298923Z level=info msg="no peer discovery configured: both join and discover peers are empty" service=cluster
+ts=2025-05-22T13:40:37.459301423Z level=info msg="running usage stats reporter"
+ts=2025-05-22T13:40:37.459303006Z level=info msg="starting complete graph evaluation" controller_path=/ controller_id="" trace_id=513b103dd57313f4e4f5027525a75298
+ts=2025-05-22T13:40:37.459307881Z level=info msg="finished node evaluation" controller_path=/ controller_id="" trace_id=513b103dd57313f4e4f5027525a75298 node_id=livedebugging duration=22.25µs
+ts=2025-05-22T13:40:37.459311506Z level=info msg="finished node evaluation" controller_path=/ controller_id="" trace_id=513b103dd57313f4e4f5027525a75298 node_id=logging duration=51.333µs
+ts=2025-05-22T13:40:37.459317881Z level=info msg="finished node evaluation" controller_path=/ controller_id="" trace_id=513b103dd57313f4e4f5027525a75298 node_id=otel duration=2.917µs
+ts=2025-05-22T13:40:37.459322715Z level=info msg="finished node evaluation" controller_path=/ controller_id="" trace_id=513b103dd57313f4e4f5027525a75298 node_id=labelstore duration=1.541µs
+ts=2025-05-22T13:40:37.461469673Z level=info msg="replaying WAL, this may take a while" component_path=/ component_id=prometheus.remote_write.default subcomponent=wal dir=/tmp/alloy/prometheus.remote_write.default/wal
+ts=2025-05-22T13:40:37.461625881Z level=info msg="WAL segment loaded" component_path=/ component_id=prometheus.remote_write.default subcomponent=wal segment=0 maxSegment=0
+ts=2025-05-22T13:40:37.462058673Z level=info msg="Starting WAL watcher" component_path=/ component_id=prometheus.remote_write.default subcomponent=rw remote_name=e10959 url=http://mimir-distributor.mimir.svc.cluster.local:8080/api/v1/push queue=e10959
+ts=2025-05-22T13:40:37.462067298Z level=info msg="Starting scraped metadata watcher" component_path=/ component_id=prometheus.remote_write.default subcomponent=rw remote_name=e10959 url=http://mimir-distributor.mimir.svc.cluster.local:8080/api/v1/push
+ts=2025-05-22T13:40:37.46207434Z level=info msg="finished node evaluation" controller_path=/ controller_id="" trace_id=513b103dd57313f4e4f5027525a75298 node_id=prometheus.remote_write.default duration=2.748416ms
+ts=2025-05-22T13:40:37.462149298Z level=info msg="Replaying WAL" component_path=/ component_id=prometheus.remote_write.default subcomponent=rw remote_name=e10959 url=http://mimir-distributor.mimir.svc.cluster.local:8080/api/v1/push queue=e10959
+ts=2025-05-22T13:40:37.462209715Z level=debug msg="Tailing WAL" component_path=/ component_id=prometheus.remote_write.default subcomponent=rw remote_name=e10959 url=http://mimir-distributor.mimir.svc.cluster.local:8080/api/v1/push lastCheckpoint="" checkpointIndex=0 currentSegment=0 lastSegment=0
+ts=2025-05-22T13:40:37.462215965Z level=debug msg="Processing segment" component_path=/ component_id=prometheus.remote_write.default subcomponent=rw remote_name=e10959 url=http://mimir-distributor.mimir.svc.cluster.local:8080/api/v1/push currentSegment=0
+E0522 13:40:42.466469       1 manager.go:303] Registration of the raw container factory failed: inotify_init: too many open files
+ts=2025-05-22T13:40:42.466500175Z level=error msg="failed to evaluate config" controller_path=/ controller_id="" trace_id=513b103dd57313f4e4f5027525a75298 node=prometheus.exporter.kubestate.kubestate err="building component: failed to start manager: inotify_init: too many open files"
+ts=2025-05-22T13:40:42.466526509Z level=info msg="finished node evaluation" controller_path=/ controller_id="" trace_id=513b103dd57313f4e4f5027525a75298 node_id=prometheus.exporter.kubestate.kubestate duration=5.004446086s
+ts=2025-05-22T13:40:42.467039092Z level=debug msg="scrape config was updated" component_path=/ component_id=prometheus.scrape.kubestate
+ts=2025-05-22T13:40:42.467056592Z level=info msg="finished node evaluation" controller_path=/ controller_id="" trace_id=513b103dd57313f4e4f5027525a75298 node_id=prometheus.scrape.kubestate duration=518.209µs
+ts=2025-05-22T13:40:42.467079092Z level=info msg="finished node evaluation" controller_path=/ controller_id="" trace_id=513b103dd57313f4e4f5027525a75298 node_id=prometheus.exporter.self.default duration=16.875µs
+ts=2025-05-22T13:40:42.467330425Z level=debug msg="scrape config was updated" component_path=/ component_id=prometheus.scrape.alloymetrics
+ts=2025-05-22T13:40:42.46734905Z level=info msg="finished node evaluation" controller_path=/ controller_id="" trace_id=513b103dd57313f4e4f5027525a75298 node_id=prometheus.scrape.alloymetrics duration=264.833µs
+ts=2025-05-22T13:40:42.4673638Z level=info msg="finished node evaluation" controller_path=/ controller_id="" trace_id=513b103dd57313f4e4f5027525a75298 node_id=tracing duration=6.5µs
+ts=2025-05-22T13:40:42.467397175Z level=info msg="finished node evaluation" controller_path=/ controller_id="" trace_id=513b103dd57313f4e4f5027525a75298 node_id=remotecfg duration=29.208µs
+ts=2025-05-22T13:40:42.467419342Z level=info msg="applying non-TLS config to HTTP server" service=http
+ts=2025-05-22T13:40:42.467431092Z level=info msg="finished node evaluation" controller_path=/ controller_id="" trace_id=513b103dd57313f4e4f5027525a75298 node_id=http duration=28.625µs
+ts=2025-05-22T13:40:42.467440842Z level=info msg="finished node evaluation" controller_path=/ controller_id="" trace_id=513b103dd57313f4e4f5027525a75298 node_id=ui duration=5.25µs
+ts=2025-05-22T13:40:42.467453425Z level=info msg="finished node evaluation" controller_path=/ controller_id="" trace_id=513b103dd57313f4e4f5027525a75298 node_id=cluster duration=1.5µs
+ts=2025-05-22T13:40:42.467456925Z level=info msg="finished complete graph evaluation" controller_path=/ controller_id="" trace_id=513b103dd57313f4e4f5027525a75298 duration=5.008291836s
+Error: /etc/alloy/test.alloy:86:1: Failed to build component: building component: failed to start manager: inotify_init: too many open files
+
+85 |   //kubestate
+86 |   prometheus.exporter.kubestate "kubestate" {
+   |  _^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+87 | |     poll_frequency = "10"
+88 | |     poll_timeout = "20"
+89 | |       // resources = 
+90 | |       // clustering =
+91 | |     // http_listen_port =   
+92 | | }
+   | |_^
+93 |   
+
+Error: could not perform the initial load successfully

@@ -1,0 +1,98 @@
+# apiVersion: rbac.authorization.k8s.io/v1
+# kind: ClusterRole
+# metadata:
+#   name: grafana-alloy-apiserver
+# rules:
+#   - apiGroups: ["certificates.k8s.io","storage.k8s.io","networking.k8s.io"]
+#     resources: ["endpoints", "services","certificatesigningrequests","volumeattachments","networkpolicies"]
+#     verbs: ["get", "list", "watch"]
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: grafana-alloy-apiserver
+rules:
+- apiGroups: [""]
+  resources:
+  - nodes
+  - pods
+  - services
+  - endpoints
+  - persistentvolumes
+  - persistentvolumeclaims
+  - replicationcontrollers
+  - resourcequotas
+  - namespaces
+  - configmaps
+  - limitranges
+  verbs: ["get", "list", "watch"]
+
+- apiGroups: ["apps"]
+  resources:
+  - deployments
+  - daemonsets
+  - replicasets
+  - statefulsets
+  verbs: ["get", "list", "watch"]
+
+- apiGroups: ["batch"]
+  resources:
+  - jobs
+  - cronjobs
+  verbs: ["get", "list", "watch"]
+
+- apiGroups: ["autoscaling"]
+  resources:
+  - horizontalpodautoscalers
+  verbs: ["get", "list", "watch"]
+
+- apiGroups: ["rbac.authorization.k8s.io"]
+  resources:
+  - roles
+  - rolebindings
+  - clusterroles
+  - clusterrolebindings
+  verbs: ["get", "list", "watch"]
+
+- apiGroups: ["certificates.k8s.io"]
+  resources:
+  - certificatesigningrequests
+  verbs: ["get", "list", "watch"]
+
+- apiGroups: ["storage.k8s.io"]
+  resources:
+  - storageclasses
+  - volumeattachments
+  verbs: ["get", "list", "watch"]
+
+- apiGroups: ["admissionregistration.k8s.io"]
+  resources:
+  - mutatingwebhookconfigurations
+  - validatingwebhookconfigurations
+  verbs: ["get", "list", "watch"]
+
+- apiGroups: ["policy"]
+  resources:
+  - poddisruptionbudgets
+  verbs: ["get", "list", "watch"]
+
+- apiGroups: ["networking.k8s.io"]
+  resources:
+  - networkpolicies
+  verbs: ["get", "list", "watch"]
+
+- apiGroups: ["coordination.k8s.io"]
+  resources:
+  - leases
+  verbs: ["get", "list", "watch"]
+
+- apiGroups: ["discovery.k8s.io"]
+  resources:
+  - endpointslices
+  verbs: ["get", "list", "watch"]
+
+- apiGroups: ["flowcontrol.apiserver.k8s.io"]
+  resources:
+  - flowschemas
+  - prioritylevelconfigurations
+  verbs: ["get", "list", "watch"]

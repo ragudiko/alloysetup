@@ -1,0 +1,17 @@
+k logs alloy-cc6sp -n alloy   
+Error: /etc/alloy/test.alloy:86:1: cannot find the definition of component name "prometheus.exporter.kubestate"
+
+85 | //cadvisor
+86 | prometheus.exporter.kubestate "kubestate" {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+87 |     poll_frequency = "10"
+
+Error: /etc/alloy/test.alloy:95:18: component "prometheus.exporter.kubestate.kubestate.targets" does not exist or is out of scope
+
+94 | prometheus.scrape "kubestate" {
+
+95 |     targets    = prometheus.exporter.kubestate.kubestate.targets
+   |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+96 |     job_name   = "kubestate-metrics"
+interrupt received
+Error: could not perform the initial load successfully

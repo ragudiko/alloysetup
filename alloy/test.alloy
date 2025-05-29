@@ -1,0 +1,120 @@
+logging {
+    level  = "debug"
+    format = "logfmt"
+}
+
+livedebugging {
+  enabled = true
+}
+
+prometheus.exporter.self "default" {
+}
+
+prometheus.scrape "alloymetrics" {
+  targets    = prometheus.exporter.self.default.targets
+  forward_to = [prometheus.remote_write.default.receiver]
+}
+
+// discovery.kubernetes "kube_state_metrics" {
+//   role = "endpoints"
+//   selectors {
+//     role = "endpoints"
+//     label = "app.kubernetes.io/name=kube-state-metrics"
+//   }
+// }
+
+// prometheus.scrape "kube_state_metrics" {
+//   targets = discovery.kubernetes.kube_state_metrics.targets
+//   forward_to = [prometheus.remote_write.default.receiver]
+//   job_name = "ksmjob"
+// }
+
+// discovery.kubernetes "apiserver" {
+//   role = "endpoints"
+//   selectors {
+//     role      = "endpoints"
+//     label     = "component=kube-apiserver"
+//   }
+// }
+
+// prometheus.scrape "apiserver" {
+//   targets = discovery.kubernetes.apiserver.targets
+//   scheme  = "https"
+//   bearer_token_file = "/var/run/secrets/kubernetes.io/serviceaccount/token"
+//   forward_to = [prometheus.remote_write.default.receiver]
+//   job_name = "apiserver"
+// }
+
+//cadvisor
+// prometheus.exporter.cadvisor "cadvisor" {
+//     store_container_labels = false
+//     disable_root_cgroup_stats = true
+//     allowlisted_container_labels = ["io.kubernetes.container.name", "io.kubernetes.pod.name", "io.kubernetes.pod.namespace"]
+//     docker_only = true
+//     raw_cgroup_prefix_allowlist = [ "/docker/" ]  
+// }
+// prometheus.scrape "cadvisor" {
+//     targets    = prometheus.exporter.cadvisor.cadvisor.targets
+//     job_name   = "k8s-cadvisor-default"
+//     forward_to = [ prometheus.relabel.cadvisor.receiver ]    
+// }
+
+// prometheus.relabel "cadvisor" {
+//     rule{
+//         source_labels = ["container_label_io_kubernetes_container_name"]
+//         action = "replace"
+//         target_label = "container"
+//     }
+
+//     rule{
+//         source_labels = ["container_label_io_kubernetes_pod_name"]
+//         action = "replace"
+//         target_label = "pod"
+//     }
+
+//     rule{
+//         source_labels = ["container_label_io_kubernetes_pod_namespace"]
+//         action = "replace"
+//         target_label = "namespace"
+//     }
+
+//     rule{
+//         source_labels = ["__name__"]
+//         regex = "container_cpu_usage_seconds_total|container_spec_cpu_period|container_cpu_cfs_throttled_periods_tota"
+//         action = "keep"
+//     }
+//     forward_to = [ prometheus.remote_write.default.receiver ]
+// }
+
+//kubestate
+prometheus.exporter.kubestate "kubestate" {
+    poll_frequency = "10"
+    poll_timeout = "20"
+	  // resources = 
+	  // clustering =
+    // http_listen_port =   
+}
+
+prometheus.scrape "kubestate" {
+    targets    = prometheus.exporter.kubestate.kubestate.targets
+  //   targets = [
+  //   {
+  //     __address__ = "localhost:43563",
+  //   },
+  // ]
+    job_name   = "kubestate-metrics"
+    forward_to = [ prometheus.remote_write.default.receiver ]    
+}
+
+prometheus.remote_write "default" {
+  external_labels = {
+        "kube_cluster_name" = "test_ksm_metrics",
+
+    }
+  endpoint {
+    url = "http://mimir-distributor.mimir.svc.cluster.local:8080/api/v1/push"
+          headers = {
+		        "X-Scope-OrgID" = "anonymous",
+		      }
+    }
+}

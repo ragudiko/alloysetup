@@ -1,0 +1,83 @@
+alloy:
+  alloy:
+    enableReporting: false
+
+    configMap:
+      create: false
+      name: alloy-config
+      key: test.alloy
+
+    mounts:
+      extra:
+        - mountPath: /var/lib/docker
+          name: docker
+          readOnly: true
+        - mountPath: /var/run/docker.sock
+          name: dockersock
+          readOnly: true
+        - mountPath: /proc
+          name: procfs
+          readOnly: true
+        - mountPath: /sys
+          name: sysfs
+          readOnly: true
+        - mountPath: /rootfs
+          name: rootfs
+          readOnly: true
+
+    securityContext:
+      privileged: true
+      runAsUser: 0
+
+    command:
+      - /bin/sh
+      - -c
+      - |
+        ulimit -n 65536 && exec /bin/alloy --config.file=/etc/alloy/test.alloy
+
+    resources:
+      requests:
+        cpu: "400m"
+        memory: "1Gi"
+      limits:
+        cpu: "500m"
+        memory: "1.5Gi"
+
+  controller:
+    hostNetwork: true
+    hostPID: true
+    dnsPolicy: ClusterFirstWithHostNet
+
+    volumes:
+      extra:
+        - name: dockersock
+          hostPath:
+            path: /var/run/docker.sock
+        - name: docker
+          hostPath:
+            path: /var/lib/docker
+        - name: procfs
+          hostPath:
+            path: /proc
+        - name: sysfs
+          hostPath:
+            path: /sys
+        - name: rootfs
+          hostPath:
+            path: /
+
+image:
+  # -- Grafana Alloy image registry (defaults to docker.io)
+  # registry: "docker.io"
+  # -- Grafana Alloy image repository.
+  # repository: grafana/alloy
+  # -- (string) Grafana Alloy image tag. When empty, the Chart's appVersion is
+  # used.
+  repository: alloy
+  tag: "v1"
+  # -- Grafana Alloy image's SHA256 digest (either in format "sha256:XYZ" or "XYZ"). When set, will override `image.tag`.
+  digest: null
+  # -- Grafana Alloy image pull policy.
+  pullPolicy: IfNotPresent
+  # -- Optional set of image pull secrets.
+  pullSecrets: []

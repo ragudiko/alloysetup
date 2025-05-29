@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: leader-election-demo
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: leader-demo
+  template:
+    metadata:
+      labels:
+        app: leader-demo
+    spec:
+      serviceAccountName: leader-election-sa
+      containers:
+        - name: leader
+          image: your-registry/leader-election:latest
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name

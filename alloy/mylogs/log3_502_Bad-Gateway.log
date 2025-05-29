@@ -1,0 +1,8 @@
+k logs alloy-59wrj -n alloy
+Error from server: Get "https://172.18.0.2:10250/containerLogs/alloy/alloy-59wrj/alloy": proxy error from 127.0.0.1:6443 while dialing 172.18.0.2:10250, code 502: 502 Bad Gateway
+
+
+*********************log ends *****************
+
+k describe pod alloy-7kmxj -n alloy
+kubelet            MountVolume.SetUp failed for volume "config" : failed to sync configmap cache: timed out waiting for the condition
