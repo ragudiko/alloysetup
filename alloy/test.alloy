@@ -86,21 +86,56 @@ prometheus.scrape "alloymetrics" {
 //     forward_to = [ prometheus.remote_write.default.receiver ]
 // }
 
+// prometheus.exporter.kubestate "default" {
+//   metric_allowlist = {
+//     "kube_pod_info" = {},
+//     "kube_deployment_spec_replicas" = {}
+//   }
+//   namespaces = {
+//     include = ["default"]
+//   }
+//   resources = ["pods", "deployments"]
+//   port = 37425
+// }
+
+// prometheus.scrape "ksm" {
+//   targets = [
+//     {
+//       __address__ = "localhost:37425"
+//     }
+//   ]
+//   job_name = "ksm"
+//   forward_to = [prometheus.remote_write.default.receiver]
+// }
+
+// discovery.kubernetes "kube_state_metrics" {
+//   role = "endpoints"
+//   selectors {
+//     role = "endpoints"
+//     label = "app.kubernetes.io/name=kube-state-metrics"
+//   }
+// }
+
 //kubestate
 prometheus.exporter.kubestate "kubestate" {
     poll_frequency = "10"
     poll_timeout = "20"
+    
 	  // resources = 
 	  // clustering =
-    // http_listen_port =   
+    // http_listen_port =
+
+    // metric_allowlist = ["kube_cronjob_info","kube_cronjob_labels","kube_daemonset_labels",]
+    // resources = ["cronjobs", "daemonsets"]
+    
 }
 
 prometheus.scrape "kubestate" {
     targets    = prometheus.exporter.kubestate.kubestate.targets
-  //   targets = [
-  //   {
-  //     __address__ = "localhost:43563",
-  //   },
+    // targets = [
+    // {
+    //   __address__ = "localhost:37425",
+    // },
   // ]
     job_name   = "kubestate-metrics"
     forward_to = [ prometheus.remote_write.default.receiver ]    

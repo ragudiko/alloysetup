@@ -134,7 +134,7 @@ image:
   # -- (string) Grafana Alloy image tag. When empty, the Chart's appVersion is
   # used.
   repository: alloy
-  tag: "v5_RunKubeStateMetrics"
+  tag: "v7_RunKubeStateMetrics"
   # -- Grafana Alloy image's SHA256 digest (either in format "sha256:XYZ" or "XYZ"). When set, will override `image.tag`.
   digest: null
   # -- Grafana Alloy image pull policy.
@@ -462,3 +462,4 @@ extraObjects: []
 #   stringData:
 #     PROMETHEUS_HOST: 'https://prometheus-us-central1.grafana.net/api/prom/push'
 #     PROMETHEUS_USERNAME: '123456'
+
