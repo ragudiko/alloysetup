@@ -134,7 +134,8 @@ image:
   # -- (string) Grafana Alloy image tag. When empty, the Chart's appVersion is
   # used.
   repository: alloy
-  tag: "v7_RunKubeStateMetrics"
+  # tag: "v8_RunKubeStateMetrics"
+  tag: "v9_port_hardcoded"
   # -- Grafana Alloy image's SHA256 digest (either in format "sha256:XYZ" or "XYZ"). When set, will override `image.tag`.
   digest: null
   # -- Grafana Alloy image pull policy.
