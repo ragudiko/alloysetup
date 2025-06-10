@@ -135,7 +135,7 @@ image:
   # used.
   repository: alloy
   # tag: "v8_RunKubeStateMetrics"
-  tag: "v9_port_hardcoded"
+  tag: "v12_clean_code"
   # -- Grafana Alloy image's SHA256 digest (either in format "sha256:XYZ" or "XYZ"). When set, will override `image.tag`.
   digest: null
   # -- Grafana Alloy image pull policy.
