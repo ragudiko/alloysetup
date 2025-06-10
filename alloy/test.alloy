@@ -15,36 +15,12 @@ prometheus.scrape "alloymetrics" {
   forward_to = [prometheus.remote_write.default.receiver]
 }
 
-
-
-
-
-//kubestate ************** the name of teh component is kubestate
+//kubestate ************** the name of the component is kubestate
 prometheus.exporter.kubestate "kubestate" {
     poll_frequency = "10"
     poll_timeout = "20"
-    port = 37425 // hardcoded in code // mandatory
-    
-    // http_listen_port = 8081
-
+    port = 37425 
 }
-
-// prometheus.scrape "kubestate" {
-//   targets = discovery.kubernetes.kubestate.targets
-//   forward_to = [prometheus.remote_write.default.receiver]
-// }
-
-
-// prometheus.scrape "kubestate" {
-//     targets    = prometheus.exporter.kubestate.kubestate.targets
-//     // targets = [
-//     // {
-//     //   __address__ = "localhost:37425",
-//     // },
-//   // ]
-//     job_name   = "kubestate-metrics"
-//     forward_to = [ prometheus.remote_write.default.receiver ]    
-// }
 
 prometheus.remote_write "default" {
   external_labels = {
