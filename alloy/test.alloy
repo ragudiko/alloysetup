@@ -15,11 +15,26 @@ prometheus.scrape "alloymetrics" {
   forward_to = [prometheus.remote_write.default.receiver]
 }
 
-//kubestate ************** the name of the component is kubestate
-prometheus.exporter.kubestate "kubestate" {
-    poll_frequency = "10"
-    poll_timeout = "20"
-    port = 37425 
+discovery.kubernetes "kube_state_metrics" {
+  role = "endpoints"
+  selectors {
+    role = "endpoints"
+    label = "app.kubernetes.io/name=kube-state-metrics"
+  }
+}
+
+// prometheus.cluster "default" {
+//   name = "ksm-leader-election"
+//   namespace = "alloy"
+// }
+
+prometheus.scrape "kube_state_metrics" {
+  clustering {
+        enabled = true
+    }
+  
+  targets = discovery.kubernetes.kube_state_metrics.targets
+  forward_to = [prometheus.remote_write.default.receiver]
 }
 
 prometheus.remote_write "default" {
