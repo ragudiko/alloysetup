@@ -135,7 +135,7 @@ image:
   # used.
   repository: alloy
   # tag: "v8_RunKubeStateMetrics"
-  tag: "v12_clean_code"
+  tag: "v_clustering_nodename"
   # -- Grafana Alloy image's SHA256 digest (either in format "sha256:XYZ" or "XYZ"). When set, will override `image.tag`.
   digest: null
   # -- Grafana Alloy image pull policy.
@@ -373,7 +373,33 @@ controller:
   initContainers: []
 
   # -- Additional containers to run alongside the Alloy container and initContainers.
-  extraContainers: []
+  # extraContainers: []
+  # values.yaml
+  extraContainers:
+  - name: kube-state-metrics
+    image: registry.k8s.io/kube-state-metrics/kube-state-metrics:v2.10.1
+    args:
+      - --port=9080
+      - --telemetry-port=9081
+    ports:
+      - name: http-metrics
+        containerPort: 9080
+      - name: telemetry
+        containerPort: 9081
+    resources:
+      limits:
+        cpu: 100m
+        memory: 100Mi
+      requests:
+        cpu: 50m
+        memory: 50Mi
+    readinessProbe:
+      httpGet:
+        path: /metrics
+        port: 9080
+      initialDelaySeconds: 5
+      periodSeconds: 10
+
 
 service:
   # -- Creates a Service for the controller's pods.
