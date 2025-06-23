@@ -42,7 +42,7 @@ alloy:
 
   clustering:
     # -- Deploy Alloy in a cluster to allow for load distribution.
-    enabled: false
+    enabled: true
 
     # -- Name for the Alloy cluster. Used for differentiating between clusters.
     name: ""
@@ -76,7 +76,12 @@ alloy:
   enableReporting: true
 
   # -- Extra environment variables to pass to the Alloy container.
-  extraEnv: []
+  # extraEnv: []
+  # extraEnv:
+  #   - name: NODE_NAME
+  #     valueFrom:
+  #       fieldRef:
+  #         fieldPath: spec.nodeName
 
   # -- Maps all the keys on a ConfigMap or Secret as environment variables. https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#envfromsource-v1-core
   envFrom: []
@@ -135,7 +140,7 @@ image:
   # used.
   repository: alloy
   # tag: "v8_RunKubeStateMetrics"
-  tag: "v_clustering_nodename"
+  tag: "v4_clustering"
   # -- Grafana Alloy image's SHA256 digest (either in format "sha256:XYZ" or "XYZ"). When set, will override `image.tag`.
   digest: null
   # -- Grafana Alloy image pull policy.
@@ -379,11 +384,13 @@ controller:
   - name: kube-state-metrics
     image: registry.k8s.io/kube-state-metrics/kube-state-metrics:v2.10.1
     args:
-      - --port=9080
+      - --port=9060
       - --telemetry-port=9081
+      #resource filtering -- write: broken pipe
+      - --resources=configmaps,cronjobs,daemonsets
     ports:
       - name: http-metrics
-        containerPort: 9080
+        containerPort: 9060
       - name: telemetry
         containerPort: 9081
     resources:
@@ -396,7 +403,7 @@ controller:
     readinessProbe:
       httpGet:
         path: /metrics
-        port: 9080
+        port: 9060
       initialDelaySeconds: 5
       periodSeconds: 10
 

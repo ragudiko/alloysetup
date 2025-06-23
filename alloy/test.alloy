@@ -1,3 +1,4 @@
+// // ===========side car 
 logging {
     level  = "debug"
     format = "logfmt"
@@ -23,19 +24,31 @@ discovery.kubernetes "kube_state_metrics" {
   }
 }
 
-// prometheus.cluster "default" {
-//   name = "ksm-leader-election"
-//   namespace = "alloy"
-// }
-
 prometheus.scrape "kube_state_metrics" {
   clustering {
         enabled = true
-    }
-  
-  targets = discovery.kubernetes.kube_state_metrics.targets
+  }
+  // scrape_interval = "30s"
+  // scrape_timeout  = "15s"
+  // targets = discovery.kubernetes.kube_state_metrics.targets
+  //the below target also works
+  targets = [
+    {
+      __address__ = "localhost:9060",
+    },
+  ]
+  // forward_to = [ prometheus.relabel.kube_state_metrics.receiver ] 
   forward_to = [prometheus.remote_write.default.receiver]
 }
+
+// prometheus.relabel "kube_state_metrics" {
+//     rule{
+//         source_labels = ["namespace"]
+//         action = "keep"
+//         regex = "kube-node-lease"
+//     }
+//     forward_to = [ prometheus.remote_write.default.receiver ]
+// }
 
 prometheus.remote_write "default" {
   external_labels = {
@@ -49,3 +62,43 @@ prometheus.remote_write "default" {
 		      }
     }
 }
+
+
+// // =============== embedded ksm
+
+// logging {
+//     level  = "debug"
+//     format = "logfmt"
+// }
+
+// livedebugging {
+//   enabled = true
+// }
+
+// prometheus.exporter.self "default" {
+// }
+
+// prometheus.scrape "alloymetrics" {
+//   targets    = prometheus.exporter.self.default.targets
+//   forward_to = [prometheus.remote_write.default.receiver]
+// }
+
+// //kubestate ************** the name of the component is kubestate
+// prometheus.exporter.kubestate "kubestate" {
+//     poll_frequency = "10"
+//     poll_timeout = "20"
+//     port = 37425 
+// }
+
+// prometheus.remote_write "default" {
+//   external_labels = {
+//         "kube_cluster_name" = "test_ksm_metrics",
+
+//     }
+//   endpoint {
+//     url = "http://mimir-distributor.mimir.svc.cluster.local:8080/api/v1/push"
+//           headers = {
+// 		        "X-Scope-OrgID" = "anonymous",
+// 		      }
+//     }
+// }
