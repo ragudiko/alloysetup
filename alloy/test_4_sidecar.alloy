@@ -1,0 +1,63 @@
+logging {
+    level  = "debug"
+    format = "logfmt"
+}
+
+livedebugging {
+  enabled = true
+}
+
+prometheus.exporter.self "default" {
+}
+
+prometheus.scrape "alloymetrics" {
+  targets    = prometheus.exporter.self.default.targets
+  forward_to = [prometheus.remote_write.default.receiver]
+}
+
+discovery.kubernetes "kube_state_metrics" {
+  role = "endpoints"
+  selectors {
+    role = "endpoints"
+    label = "app.kubernetes.io/name=kube-state-metrics"
+  }
+}
+
+prometheus.scrape "kube_state_metrics" {
+  clustering {
+        enabled = true
+  }
+  // scrape_interval = "30s"
+  // scrape_timeout  = "15s"
+  // targets = discovery.kubernetes.kube_state_metrics.targets
+  //the below target also works
+  targets = [
+    {
+      __address__ = "localhost:9060",
+    },
+  ]
+  // forward_to = [ prometheus.relabel.kube_state_metrics.receiver ] 
+  forward_to = [prometheus.remote_write.default.receiver]
+}
+
+// prometheus.relabel "kube_state_metrics" {
+//     rule{
+//         source_labels = ["namespace"]
+//         action = "keep"
+//         regex = "kube-node-lease"
+//     }
+//     forward_to = [ prometheus.remote_write.default.receiver ]
+// }
+
+prometheus.remote_write "default" {
+  external_labels = {
+        "kube_cluster_name" = "test_ksm_metrics",
+
+    }
+  endpoint {
+    url = "http://mimir-distributor.mimir.svc.cluster.local:8080/api/v1/push"
+          headers = {
+		        "X-Scope-OrgID" = "anonymous",
+		      }
+    }
+}

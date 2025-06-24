@@ -1,0 +1,36 @@
+logging {
+    level  = "debug"
+    format = "logfmt"
+}
+
+livedebugging {
+  enabled = true
+}
+
+prometheus.exporter.self "default" {
+}
+
+prometheus.scrape "alloymetrics" {
+  targets    = prometheus.exporter.self.default.targets
+  forward_to = [prometheus.remote_write.default.receiver]
+}
+
+//kubestate ************** the name of the component is kubestate
+prometheus.exporter.kubestate "kubestate" {
+    poll_frequency = "10"
+    poll_timeout = "20"
+    port = 37425 
+}
+
+prometheus.remote_write "default" {
+  external_labels = {
+        "kube_cluster_name" = "test_ksm_metrics",
+
+    }
+  endpoint {
+    url = "http://mimir-distributor.mimir.svc.cluster.local:8080/api/v1/push"
+          headers = {
+		        "X-Scope-OrgID" = "anonymous",
+		      }
+    }
+}
