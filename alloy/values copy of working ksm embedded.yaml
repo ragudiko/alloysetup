@@ -42,7 +42,7 @@ alloy:
 
   clustering:
     # -- Deploy Alloy in a cluster to allow for load distribution.
-    enabled: true
+    enabled: false
 
     # -- Name for the Alloy cluster. Used for differentiating between clusters.
     name: ""
@@ -76,12 +76,7 @@ alloy:
   enableReporting: true
 
   # -- Extra environment variables to pass to the Alloy container.
-  # extraEnv: []
-  extraEnv:
-  - name: NODE_NAME
-    valueFrom:
-      fieldRef:
-        fieldPath: spec.nodeName
+  extraEnv: []
 
   # -- Maps all the keys on a ConfigMap or Secret as environment variables. https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#envfromsource-v1-core
   envFrom: []
@@ -118,15 +113,7 @@ alloy:
   securityContext: {}
 
   # -- Resource requests and limits to apply to the Grafana Alloy container.
-  # resources: {}
-  resources:
-    requests:
-      cpu: "100m"
-      memory: "200Mi"
-    limits:
-      cpu: 200m
-      memory: 500Mi
-  
+  resources: {}
 
   # -- Set lifecycle hooks for the Grafana Alloy container.
   lifecycle: {}
@@ -148,7 +135,7 @@ image:
   # used.
   repository: alloy
   # tag: "v8_RunKubeStateMetrics"
-  tag: "v6_clustering"
+  tag: "v12_clean_code"
   # -- Grafana Alloy image's SHA256 digest (either in format "sha256:XYZ" or "XYZ"). When set, will override `image.tag`.
   digest: null
   # -- Grafana Alloy image pull policy.
@@ -189,8 +176,10 @@ configReloader:
   # -- Override the args passed to the container.
   customArgs: []
   # -- Resource requests and limits to apply to the config reloader container.
-  resources: {}
-    
+  resources:
+    requests:
+      cpu: "10m"
+      memory: "50Mi"
   # -- Security context to apply to the Grafana configReloader container.
   securityContext: {}
 

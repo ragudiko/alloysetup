@@ -1,6 +1,3 @@
-
-// =============== embedded ksm
-
 logging {
     level  = "debug"
     format = "logfmt"
@@ -18,30 +15,43 @@ prometheus.scrape "alloymetrics" {
   forward_to = [prometheus.remote_write.default.receiver]
 }
 
-//kubestate ************** the name of the component is kubestate
-prometheus.exporter.kubestate "kubestate" {
-    poll_frequency = "10"
-    poll_timeout = "20"
-    port = 37425
+discovery.kubernetes "kube_state_metrics" {
+  role = "endpoints"
+  selectors {
+    role = "endpoints"
+    label = "app.kubernetes.io/name=kube-state-metrics"
+  }
 }
 
 prometheus.scrape "kube_state_metrics" {
   clustering {
         enabled = true
   }
+  // scrape_interval = "30s"
+  // scrape_timeout  = "15s"
+  // targets = discovery.kubernetes.kube_state_metrics.targets
   //the below target also works
   targets = [
     {
-      __address__ = "localhost:37425",
+      __address__ = "localhost:9060",
     },
   ]
+  // forward_to = [ prometheus.relabel.kube_state_metrics.receiver ] 
   forward_to = [prometheus.remote_write.default.receiver]
 }
+
+// prometheus.relabel "kube_state_metrics" {
+//     rule{
+//         source_labels = ["namespace"]
+//         action = "keep"
+//         regex = "kube-node-lease"
+//     }
+//     forward_to = [ prometheus.remote_write.default.receiver ]
+// }
 
 prometheus.remote_write "default" {
   external_labels = {
         "kube_cluster_name" = "test_ksm_metrics",
-        "host_hostname" = sys.env("HOSTNAME"),
 
     }
   endpoint {

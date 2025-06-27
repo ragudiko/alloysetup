@@ -1,6 +1,3 @@
-
-// =============== embedded ksm
-
 logging {
     level  = "debug"
     format = "logfmt"
@@ -22,26 +19,12 @@ prometheus.scrape "alloymetrics" {
 prometheus.exporter.kubestate "kubestate" {
     poll_frequency = "10"
     poll_timeout = "20"
-    port = 37425
-}
-
-prometheus.scrape "kube_state_metrics" {
-  clustering {
-        enabled = true
-  }
-  //the below target also works
-  targets = [
-    {
-      __address__ = "localhost:37425",
-    },
-  ]
-  forward_to = [prometheus.remote_write.default.receiver]
+    port = 37425 
 }
 
 prometheus.remote_write "default" {
   external_labels = {
         "kube_cluster_name" = "test_ksm_metrics",
-        "host_hostname" = sys.env("HOSTNAME"),
 
     }
   endpoint {
